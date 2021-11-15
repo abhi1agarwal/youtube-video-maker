@@ -5,6 +5,8 @@ import os
 from shutil import copyfile
 from google_images_download import google_images_download
 from PIL import Image
+import random
+
 
 class ImageRobot():
 
@@ -14,11 +16,14 @@ class ImageRobot():
 
     def get_image(self, keywords, master_key):
         keywords = " and ".join(keywords) + " and " + master_key
-        arguments = {"keywords" : keywords, "limit" : 1, "print_urls" : True,
-                "no_directory" : True, "size" : "large",
-                "output_directory" : self.download_directory}
+        arguments = {"keywords": keywords, "limit": 3, "print_urls": True,
+                     "no_directory": True, "size": "large",
+                     "output_directory": self.download_directory}
 
-        return self.response.download(arguments)[0][keywords]
+        ret = self.response.download(arguments)
+        choice_num = random.randint(0, len(ret[0][keywords]) - 1)
+        print("return value " + str(ret) + " choice " + str(choice_num))
+        return [ret[0][keywords][choice_num]]
 
     def rename_files(self, files):
         new_files_list = []

@@ -34,7 +34,7 @@ class VideoRobot():
             self.template_out = self.template_out + thisOne
 
     def make_video(self):
-        command = "cat {0}/img*.jpg | ffmpeg -y -framerate 0.08 -f image2pipe -i - -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" {0}/output_imgs.mp4".format(self.images_directory)
+        command = "cat {0}/img*.jpg | ffmpeg -y -framerate 0.08 -f image2pipe -i - -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2,scale=w=1630:h=1080:eval=init:interl=false:in_range=pc:out_range=tv,format=yuv420p,setsar=1631/1630\" {0}/output_imgs.mp4".format(self.images_directory)
         os.system(command)
 
     def add_subtitles(self, sentences):

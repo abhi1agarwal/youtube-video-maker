@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from shutil import copyfile
 from google_images_download import google_images_download
 from PIL import Image
 
@@ -24,10 +25,8 @@ class ImageRobot():
         for i in range(len(files)):
             try:
                 new_name = "{0}/img{1}".format(self.download_directory, str(i).zfill(3))
+                copyfile(files[i][0], new_name)
                 new_files_list.append(new_name)
-                os.rename(files[i][0], new_name)
-            except FileNotFoundError as ex:
-                print("The image has probably been replaced!!!")
             except OSError as ex:
                 print("Exception while renaming " + str(files[i]) + " : " + str(ex))
                 raise ex

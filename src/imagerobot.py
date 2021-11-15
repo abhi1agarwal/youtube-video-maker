@@ -23,11 +23,14 @@ class ImageRobot():
         new_files_list = []
         for i in range(len(files)):
             try:
-                new_name = "{0}/img{1}".format(self.download_directory, i)
-                os.rename(files[i], new_name)
+                new_name = "{0}/img{1}".format(self.download_directory, str(i).zfill(3))
                 new_files_list.append(new_name)
-            except:
-                continue
+                os.rename(files[i][0], new_name)
+            except FileNotFoundError as ex:
+                print("The image has probably been replaced!!!")
+            except OSError as ex:
+                print("Exception while renaming " + str(files[i]) + " : " + str(ex))
+                raise ex
 
         return new_files_list
 

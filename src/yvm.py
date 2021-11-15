@@ -10,16 +10,19 @@ from videorobot import VideoRobot
 from uploadrobot import UploadRobot
 from urllib.error import HTTPError
 
+
 def make_project_directory(search_term):
     try:
         search_term = search_term.replace(" ", "_")
         directory_path = os.path.expanduser("~") + "/{}".format(search_term)
+        print("directory Path chosen" + directory_path)
         os.mkdir(directory_path)
 
         return directory_path
-    except OSError:
-        print("Creation of the project directory failed.")
+    except OSError as ex:
+        print("Creation of the project directory failed." + str(ex))
         sys.exit(1)
+
 
 if __name__ == "__main__":
     search_term = input("Wikipedia search term: ")
@@ -54,13 +57,17 @@ if __name__ == "__main__":
         print("[*] Image saved in: " + str(img))
 
     print("[*] Renaming images...")
+    print("[DIG]" "PRE Image List is " + str(images_list))
     images_list = image_robot.rename_files(images_list)
-
+    print("[DIG]" "POST Image List is " + str(images_list))
     print("[*] Converting images to JPG...")
     image_robot.convert_to_jpg(images_list)
 
     print("[*] Starting video robot...")
-    video_robot = VideoRobot(project_directory)
+    print("[DIG]" "Project directory " + str(project_directory))
+    print("[DIG]" "Search result " + str(search_result))
+    print("[DIG] Image list size " + str(len(images_list)) + " search results size " + str(len(search_result)))
+    video_robot = VideoRobot(project_directory, len(images_list))
     video_robot.make_video()
     video_robot.add_subtitles(search_result)
     video_robot.add_music()
@@ -78,16 +85,16 @@ if __name__ == "__main__":
     keywords = ",".join(keywords)
 
     args = argparse.Namespace(
-        auth_host_name =  "localhost",
-        auth_host_port = [8080, 8090],
-        category = "27",
-        description = description,
-        file = "{}/final_video.mp4".format(project_directory),
-        keywords = keywords,
-        logging_level =  "ERROR",
-        noauth_local_webserver = False,
-        privacy_status = "public",
-        title = title)
+        auth_host_name="localhost",
+        auth_host_port=[8080, 8090],
+        category="27",
+        description=description,
+        file="{}/final_video.mp4".format(project_directory),
+        keywords=keywords,
+        logging_level="ERROR",
+        noauth_local_webserver=False,
+        privacy_status="public",
+        title=title)
 
     youtube = upload_robot.get_authenticated_service(args)
 

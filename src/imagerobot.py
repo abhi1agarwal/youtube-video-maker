@@ -17,7 +17,7 @@ class ImageRobot():
     def get_image(self, keywords, master_key):
         keywords = " and ".join(keywords) + " and " + master_key
         arguments = {"keywords": keywords, "limit": 3, "print_urls": True,
-                     "no_directory": True, "size": "large",
+                     "no_directory": True, "size": "large", 'aspect_ratio': 'wide',
                      "output_directory": self.download_directory}
 
         ret = self.response.download(arguments)

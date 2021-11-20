@@ -36,16 +36,13 @@ if __name__ == "__main__":
     print("Avaiable prefixes:\n1. What is\n2. Who is\n3. The history of\n4. Learn more about")
     prefixes = ["What is", "Who is", "The history of", "Learn more about"]
     prefix = input("Prefix: ")
-    if not prefix in "1234":
-        print("Please enter a prefix.")
-        sys.exit(1)
+    suffix = ""
 
     project_directory = make_project_directory(search_term)
-    prefix = prefixes[int(prefix) - 1]
 
     print("[*] Starting search robot...")
     search_robot = SearchRobot()
-    search_result = search_robot.search(search_term)
+    search_result = search_robot.search(search_term + " " + suffix)
     keywords_list = search_robot.get_keywords(search_result)
     for i in range(len(search_result)):
         print("[*] Sentence {0}: {1}".format(i + 1, search_result[i]))
@@ -57,7 +54,7 @@ if __name__ == "__main__":
     keywords_list_cleansed = []
     whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 123456789')
     for keywords in keywords_list:
-        img = image_robot.get_image(keywords, search_term)
+        img = image_robot.get_image(keywords, search_term + " " + suffix)
         images_list.append(img)
         print("[*] Image saved in: " + str(img))
         for keyword in keywords:

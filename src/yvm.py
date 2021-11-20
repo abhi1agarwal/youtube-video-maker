@@ -3,7 +3,10 @@
 
 import argparse
 import os
+import re
 import sys
+from itertools import chain
+
 from imagerobot import ImageRobot
 from searchrobot import SearchRobot
 from videorobot import VideoRobot
@@ -51,10 +54,14 @@ if __name__ == "__main__":
     print("[*] Starting image robot...")
     image_robot = ImageRobot(project_directory)
     images_list = []
+    keywords_list_cleansed = []
+    whitelist = set('abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 123456789')
     for keywords in keywords_list:
         img = image_robot.get_image(keywords, search_term)
         images_list.append(img)
         print("[*] Image saved in: " + str(img))
+        for keyword in keywords:
+            keywords_list_cleansed.append(''.join(filter(whitelist.__contains__, keyword)))
 
     print("[*] Renaming images...")
     print("[DIG]" "PRE Image List is " + str(images_list))
@@ -76,13 +83,10 @@ if __name__ == "__main__":
     upload_robot = UploadRobot()
 
     title = prefix + " " + search_term
-    description = "\n\n".join(search_result)
-    keywords = []
-
-    for i in keywords_list:
-        keywords += i
-
-    keywords = ",".join(keywords)
+    description = "\n\n".join(search_result).strip()
+    description.replace("<", "")
+    description.replace(">", "")
+    keywords = ",".join(keywords_list_cleansed[:10]).strip()
 
     args = argparse.Namespace(
         auth_host_name="localhost",
@@ -98,7 +102,7 @@ if __name__ == "__main__":
 
     youtube = upload_robot.get_authenticated_service(args)
 
-    print("[*] Uploading video...")
+    print("[*] Uploading video... with args " + str(args))
     try:
         upload_robot.initialize_upload(youtube, args)
     except HTTPError as e:

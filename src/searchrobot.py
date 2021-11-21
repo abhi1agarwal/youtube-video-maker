@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import re
+
 import wikipedia as wiki
-from rake_nltk import Rake
 from nltk import tokenize
+from rake_nltk import Rake
 from watson_developer_cloud import NaturalLanguageUnderstandingV1
-from watson_developer_cloud.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
 
 
-class SearchRobot():
+class SearchRobot:
 
     def __init__(self):
         self.keywords_list = []
@@ -18,7 +18,8 @@ class SearchRobot():
             iam_apikey="YOUR_API_KEY_HERE",
             url="YOUR_URL_HERE")
 
-    def search(self, search_term):
+    @staticmethod
+    def search(search_term):
         summary = wiki.summary(search_term, sentences=40)
         summary = re.sub(r"\([^)]*\)", "", summary)
 

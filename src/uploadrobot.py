@@ -15,7 +15,7 @@ from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
 
-class UploadRobot():
+class UploadRobot:
 
     def __init__(self):
         httplib2.RETRIES = 1

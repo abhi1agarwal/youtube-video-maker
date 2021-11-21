@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import os
-from shutil import copyfile
-from google_images_download import google_images_download
-from PIL import Image
 import random
+from shutil import copyfile
+
+from PIL import Image
+from google_images_download import google_images_download
 
 
-class ImageRobot():
+class ImageRobot:
 
     def __init__(self, project_directory):
         self.response = google_images_download.googleimagesdownload()
@@ -16,12 +16,17 @@ class ImageRobot():
 
     def get_image(self, keywords, master_key):
         keywords = " and ".join(keywords) + " and " + master_key
-        arguments = {"keywords": keywords, "limit": 3, "print_urls": True,
+        arguments = {"keywords": keywords, "limit": 10, "print_urls": True,
                      "no_directory": True, "size": "large", 'aspect_ratio': 'wide',
                      "output_directory": self.download_directory}
-
         ret = self.response.download(arguments)
-        choice_num = random.randint(0, len(ret[0][keywords]) - 1)
+        # attempts to ring in a little randomness to avoid duplicates
+        choice_num = random.randint(0, min(len(ret[0][keywords]) - 1, 3))
+        if len(ret[0][keywords][choice_num]) == 0:
+            for i in range(0, len(ret[0][keywords])):
+                if len(ret[0][keywords][i]) > 0:
+                    choice_num = i
+                    break
         print("return value " + str(ret) + " choice " + str(choice_num))
         return [ret[0][keywords][choice_num]]
 
@@ -38,7 +43,8 @@ class ImageRobot():
 
         return new_files_list
 
-    def convert_to_jpg(self, files):
+    @staticmethod
+    def convert_to_jpg(files):
         for f in files:
             img = Image.open(f)
             rgb_img = img.convert("RGB")

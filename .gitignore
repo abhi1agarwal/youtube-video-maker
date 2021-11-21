@@ -1,0 +1,8 @@
+src/**.py-oauth2.json
+virt3
+xyz
+downloads
+.idea
+.DS_Store
+**/.DS_Store
+src/client_secrets.json

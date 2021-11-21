@@ -10,10 +10,12 @@ charset-normalizer==2.0.7
 click==8.0.3
 cryptography==35.0.0
 cymem==2.0.6
-google-api-python-client==1.7.8
+google-api-core==2.2.2
+google-api-python-client==2.31.0
 google-auth==2.3.3
 google-auth-httplib2==0.1.0
 google-images-download==2.8.0
+googleapis-common-protos==1.53.0
 h11==0.12.0
 httplib2==0.20.2
 idna==3.3
@@ -32,6 +34,7 @@ packaging==21.2
 pathy==0.6.1
 Pillow==8.4.0
 preshed==3.0.6
+protobuf==3.19.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21

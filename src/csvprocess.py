@@ -1,4 +1,5 @@
 import csv
+import traceback
 
 from src.yvm import VideoMaker
 
@@ -26,12 +27,14 @@ class CSVProcess:
                         video_maker.upload_video()
                     except Exception as ex:
                         out_row['is_done'] = "no_failed"
-                        print("[**] Generation for {0} failed {1}".format(row, str(ex)))
+                        print("[**] Generation for {0} failed {1} -- trace {2}".format(row, str(ex),
+                                                                                       traceback.format_exc()))
 
                     if video_maker.is_video_made and video_maker.is_video_uploaded:
                         out_row['is_done'] = 'yes'
                     else:
-                        out_row['is_done'] = 'no_failed'
+                        out_row['is_done'] = "video_made_{0}__video_uploaded_{1}".format(video_maker.is_video_made,
+                                                                                         video_maker.is_video_uploaded)
                         # out_row['is_done'] = 'yes'
                     print("[**] {0} input -> output {1}".format(str(row), str(out_row)))
                     csv_writer_output.writerow(out_row)
@@ -39,5 +42,5 @@ class CSVProcess:
 
 
 if __name__ == '__main__':
-    processor = CSVProcess("../video_detail.csv", "../detail_response.csv")
+    processor = CSVProcess("../video_plan.csv", "../plan_response.csv")
     processor.process()

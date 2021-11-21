@@ -14,7 +14,16 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from oauth2client.tools import argparser, run_flow
 
-
+## https://developers.google.com/youtube/v3/getting-started#quota
+# Calculating quota usage
+# Google calculates your quota usage by assigning a cost to each request. Different types of operations have different quota costs. For example:
+#
+# A read operation that retrieves a list of resources -- channels, videos, playlists -- usually costs 1 unit.
+# A write operation that creates, updates, or deletes a resource usually has costs 50 units.
+# A search request costs 100 units.
+# A video upload costs 1600 units.
+# The Quota costs for API requests table shows the quota cost of each API method. With these rules in mind, you can estimate the number of requests that your application could send per day without exceeding your quota.
+# https://developers.google.com/youtube/v3/determine_quota_cost
 class UploadRobot:
 
     def __init__(self):

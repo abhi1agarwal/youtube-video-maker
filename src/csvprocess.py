@@ -38,7 +38,7 @@ class CSVProcess:
                         # out_row['is_done'] = 'yes'
                     print("[**] {0} input -> output {1}".format(str(row), str(out_row)))
                     csv_writer_output.writerow(out_row)
-
+                    csv_output_file.flush()
 
 
 if __name__ == '__main__':

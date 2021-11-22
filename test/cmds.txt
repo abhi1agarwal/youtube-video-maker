@@ -1,0 +1,7 @@
+ cmt = "ffmpeg -i gen{0}.mp4 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2,scale=w=1630:h=1080:eval=init:interl=false:in_range=pc:out_range=tv,setsar=1800/1630\" xgen{0}.mp4"
+ffmpeg -f concat -i file.txt ./foutta.mp4
+>>> with open('file.txt', 'w') as fil:
+...     for i in range(11):
+...             cline = fcmt.format(str(i).zfill(3))
+...             fil.writelines(cline)
+ffmpeg -i img000.jpg -i speech000.mp3 gen000.mp4  

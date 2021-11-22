@@ -25,6 +25,7 @@ class VideoRobot:
         os.system(command)
 
     def create_final_template(self, num):
+        self.template_out = ""
         for i in range(1, int(num) + 1):
             st = (i - 1) * self.space
             en = i * self.space

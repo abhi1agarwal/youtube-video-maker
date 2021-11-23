@@ -15,7 +15,7 @@ from videorobot import VideoRobot
 def make_project_directory(search_term):
     try:
         search_term = search_term.replace(" ", "_")
-        directory_path = os.path.expanduser("~") + "/cold_play/{}".format(search_term)
+        directory_path = os.path.expanduser("~") + "/hot_play/{}".format(search_term)
         print("directory Path chosen  : " + directory_path)
         os.makedirs(directory_path, exist_ok=True)
 
@@ -26,7 +26,7 @@ def make_project_directory(search_term):
 
 
 class VideoMaker:
-    def __init__(self, stuff, prefix="what is", suffix="", suggested_keywords=""):
+    def __init__(self, stuff, prefix="what is", suffix="", suggested_keywords="", scheme=0):
         self.stuff = self.search_term = str(stuff)
         self.prefix = prefix
         self.suffix = suffix
@@ -41,7 +41,12 @@ class VideoMaker:
         self.title = (self.prefix + " " + self.search_term).strip()
         self.is_video_made = False
         self.is_video_uploaded = False
-        self.final_vide_file_name = "{}/final_video.mp4".format(self.project_directory)
+        self.scheme_video_name = {
+            0: VideoRobot.filename_final_without_subs,
+            1: VideoRobot.filename_final_withsubs_withmusic_withoutspeech
+        }
+        self.scheme = scheme
+        self.eventual_file_path = "{0}/{1}".format(self.project_directory, self.scheme_video_name[self.scheme])
 
     def make_video(self):
         print("[*] Starting search robot...")
@@ -74,10 +79,14 @@ class VideoMaker:
         print("[DIG]" "Search result " + str(self.search_result))
         print("[DIG] Image list size " + str(len(images_list)) + " search results size " + str(len(self.search_result)))
 
-        self.video_robot.make_video()
-        self.video_robot.add_subtitles(self.search_result, len(images_list))
-        self.video_robot.add_music()
-        self.is_video_made = os.path.exists(self.final_vide_file_name)
+        if self.scheme == 1:
+            self.video_robot.make_video()
+            self.video_robot.add_subtitles(self.search_result, len(images_list))
+            self.video_robot.add_music()
+        else:
+            self.video_robot.make_speech(self.search_result)
+            self.video_robot.make_videos_with_speech(len(self.search_result))
+        self.is_video_made = os.path.exists(self.eventual_file_path)
 
     def upload_video(self):
         print("[*] Starting upload robot...")
@@ -97,7 +106,7 @@ class VideoMaker:
             auth_host_port=[8080, 8090],
             category="27",
             description=description,
-            file=self.final_vide_file_name,
+            file=self.eventual_file_path,
             keywords=keywords,
             logging_level="ERROR",
             noauth_local_webserver=False,
@@ -136,7 +145,7 @@ if __name__ == "__main__":
             suggested_keywords = input("Any keywords ? ")
             video_maker = VideoMaker(search_term, prefix=prefix, suffix=suffix, suggested_keywords=suggested_keywords)
             video_maker.make_video()
-            video_maker.upload_video()
+            # video_maker.upload_video()
             print("Was video made ? {0} Was it uploaded ? {1} "
                   .format(video_maker.is_video_made, video_maker.is_video_uploaded))
 
